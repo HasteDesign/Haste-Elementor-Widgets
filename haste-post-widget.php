@@ -217,7 +217,7 @@ $this->add_control(
 	[
 		'label' => __( 'Show Post Excerpt', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::SWITCHER,
-		'default' => '',
+		'default' => true,
 		'label_on' => __( 'Show', 'haste-elementor-widgets' ),
 		'label_off' => __( 'Hide', 'haste-elementor-widgets' ),
 		'return_value' => true,
