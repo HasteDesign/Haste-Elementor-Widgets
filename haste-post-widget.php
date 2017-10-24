@@ -347,7 +347,7 @@ $this->add_responsive_control(
 		'default' => array(
 			'top' 		=> 0,
 			'right' 	=> 0,
-			'bottom' 	=> 0,
+			'bottom' 	=> 45,
 			'left' 	=> 0,
 		),
 		'selectors' => [
