@@ -774,7 +774,7 @@ $this->add_control(
 			'right' => __( 'After', 'elementor' ),
 		],
 		'condition' => [
-			'icon!' => '',
+			'read_more_icon!' => '',
 		],
 	]
 );
@@ -790,7 +790,7 @@ $this->add_control(
 			],
 		],
 		'condition' => [
-			'icon!' => '',
+			'read_more_icon!' => '',
 		],
 		'selectors' => [
 			'{{WRAPPER}} .elementor-button .elementor-align-icon-right' => 'margin-left: {{SIZE}}{{UNIT}};',
@@ -1103,7 +1103,20 @@ protected function render() {
 						?>
 						<div <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
 							<a <?php echo $this->get_render_attribute_string( 'read_more_button' ); ?> href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-								<?php $this->render_text(); ?>
+								<?php
+								$settings = $this->get_settings();
+								$this->add_render_attribute( 'content-wrapper', 'class', 'elementor-button-content-wrapper' );
+								$this->add_render_attribute( 'read_more_icon-align', 'class', 'elementor-align-icon-' . $settings['read_more_icon_align'] );
+								$this->add_render_attribute( 'read_more_icon-align', 'class', 'elementor-button-icon' );
+								?>
+								<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
+									<?php if ( ! empty( $settings['read_more_icon'] ) ) : ?>
+										<span <?php echo $this->get_render_attribute_string( 'read_more_icon-align' ); ?>>
+											<i class="<?php echo esc_attr( $settings['read_more_icon'] ); ?>"></i>
+										</span>
+									<?php endif; ?>
+									<span class="elementor-button-text"><?php echo $settings['read_more_text']; ?></span>
+								</span>
 							</a>
 						</div>
 					<?php endif; ?>
@@ -1134,19 +1147,6 @@ protected function content_template() {}
 	* @access protected
 	*/
 	protected function render_text() {
-		$settings = $this->get_settings();
-		$this->add_render_attribute( 'content-wrapper', 'class', 'elementor-button-content-wrapper' );
-		$this->add_render_attribute( 'read_more_icon-align', 'class', 'elementor-align-icon-' . $settings['read_more_icon_align'] );
-		$this->add_render_attribute( 'read_more_icon-align', 'class', 'elementor-button-icon' );
-		?>
-		<span <?php echo $this->get_render_attribute_string( 'content-wrapper' ); ?>>
-			<?php if ( ! empty( $settings['read_more_icon'] ) ) : ?>
-				<span <?php echo $this->get_render_attribute_string( 'read_more_icon-align' ); ?>>
-					<i class="<?php echo esc_attr( $settings['read_more_icon'] ); ?>"></i>
-				</span>
-			<?php endif; ?>
-			<span class="elementor-button-text"><?php echo $settings['read_more_text']; ?></span>
-		</span>
-		<?php
+
 	}
 }
