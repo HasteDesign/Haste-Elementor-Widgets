@@ -25,11 +25,11 @@ class Haste_Post_Widget extends Widget_Base {
 	*/
 	public static function get_button_sizes() {
 		return [
-			'xs' => __( 'Extra Small', 'elementor' ),
-			'sm' => __( 'Small', 'elementor' ),
-			'md' => __( 'Medium', 'elementor' ),
-			'lg' => __( 'Large', 'elementor' ),
-			'xl' => __( 'Extra Large', 'elementor' ),
+			'xs' => __( 'Extra Small', 'haste-elementor-widgets' ),
+			'sm' => __( 'Small', 'haste-elementor-widgets' ),
+			'md' => __( 'Medium', 'haste-elementor-widgets' ),
+			'lg' => __( 'Large', 'haste-elementor-widgets' ),
+			'xl' => __( 'Extra Large', 'haste-elementor-widgets' ),
 		];
 	}
 
@@ -176,7 +176,7 @@ $this->add_group_control(
 	Group_Control_Image_Size::get_type(),
 	[
 		'name' => 'image', // Actually its `image_size`.
-		'label' => __( 'Image Size', 'elementor' ),
+		'label' => __( 'Image Size', 'haste-elementor-widgets' ),
 		'default' => 'large',
 	]
 );
@@ -514,7 +514,7 @@ $this->add_control(
 $this->add_responsive_control(
 	'post_image_width',
 	[
-		'label' => __( 'Image Width (%)', 'elementor' ),
+		'label' => __( 'Image Width (%)', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::SLIDER,
 		'default' => [
 			'size' => 100,
@@ -688,15 +688,15 @@ $this->start_controls_section(
 $this->add_control(
 	'read_more_button_type',
 	[
-		'label' => __( 'Type', 'elementor' ),
+		'label' => __( 'Type', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::SELECT,
 		'default' => '',
 		'options' => [
-			'' => __( 'Default', 'elementor' ),
-			'info' => __( 'Info', 'elementor' ),
-			'success' => __( 'Success', 'elementor' ),
-			'warning' => __( 'Warning', 'elementor' ),
-			'danger' => __( 'Danger', 'elementor' ),
+			'' => __( 'Default', 'haste-elementor-widgets' ),
+			'info' => __( 'Info', 'haste-elementor-widgets' ),
+			'success' => __( 'Success', 'haste-elementor-widgets' ),
+			'warning' => __( 'Warning', 'haste-elementor-widgets' ),
+			'danger' => __( 'Danger', 'haste-elementor-widgets' ),
 		],
 		'prefix_class' => 'elementor-button-',
 	]
@@ -705,33 +705,33 @@ $this->add_control(
 $this->add_control(
 	'read_more_text',
 	[
-		'label' => __( 'Text', 'elementor' ),
+		'label' => __( 'Text', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::TEXT,
-		'default' => __( 'Click me', 'elementor' ),
-		'placeholder' => __( 'Click me', 'elementor' ),
+		'default' => __( 'Click me', 'haste-elementor-widgets' ),
+		'placeholder' => __( 'Click me', 'haste-elementor-widgets' ),
 	]
 );
 
 $this->add_responsive_control(
 	'read_more_align',
 	[
-		'label' => __( 'Alignment', 'elementor' ),
+		'label' => __( 'Alignment', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::CHOOSE,
 		'options' => [
 			'left'    => [
-				'title' => __( 'Left', 'elementor' ),
+				'title' => __( 'Left', 'haste-elementor-widgets' ),
 				'icon' => 'fa fa-align-left',
 			],
 			'center' => [
-				'title' => __( 'Center', 'elementor' ),
+				'title' => __( 'Center', 'haste-elementor-widgets' ),
 				'icon' => 'fa fa-align-center',
 			],
 			'right' => [
-				'title' => __( 'Right', 'elementor' ),
+				'title' => __( 'Right', 'haste-elementor-widgets' ),
 				'icon' => 'fa fa-align-right',
 			],
 			'justify' => [
-				'title' => __( 'Justified', 'elementor' ),
+				'title' => __( 'Justified', 'haste-elementor-widgets' ),
 				'icon' => 'fa fa-align-justify',
 			],
 		],
@@ -746,7 +746,7 @@ $this->add_responsive_control(
 $this->add_control(
 	'read_more_size',
 	[
-		'label' => __( 'Size', 'elementor' ),
+		'label' => __( 'Size', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::SELECT,
 		'default' => 'sm',
 		'options' => self::get_button_sizes(),
@@ -756,7 +756,7 @@ $this->add_control(
 $this->add_control(
 	'read_more_icon',
 	[
-		'label' => __( 'Icon', 'elementor' ),
+		'label' => __( 'Icon', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::ICON,
 		'label_block' => true,
 		'default' => '',
@@ -766,12 +766,12 @@ $this->add_control(
 $this->add_control(
 	'read_more_icon_align',
 	[
-		'label' => __( 'Icon Position', 'elementor' ),
+		'label' => __( 'Icon Position', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::SELECT,
 		'default' => 'left',
 		'options' => [
-			'left' => __( 'Before', 'elementor' ),
-			'right' => __( 'After', 'elementor' ),
+			'left' => __( 'Before', 'haste-elementor-widgets' ),
+			'right' => __( 'After', 'haste-elementor-widgets' ),
 		],
 		'condition' => [
 			'read_more_icon!' => '',
@@ -782,7 +782,7 @@ $this->add_control(
 $this->add_control(
 	'read_more_icon_indent',
 	[
-		'label' => __( 'Icon Spacing', 'elementor' ),
+		'label' => __( 'Icon Spacing', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::SLIDER,
 		'range' => [
 			'px' => [
@@ -804,7 +804,7 @@ $this->add_group_control(
 	Group_Control_Typography::get_type(),
 	[
 		'name' => 'read_more_typography',
-		'label' => __( 'Typography', 'elementor' ),
+		'label' => __( 'Typography', 'haste-elementor-widgets' ),
 		'scheme' => Scheme_Typography::TYPOGRAPHY_4,
 		'selector' => '{{WRAPPER}} a.elementor-button, {{WRAPPER}} .elementor-button',
 	]
@@ -816,14 +816,14 @@ $this->start_controls_tabs( 'tabs_button_style' );
 $this->start_controls_tab(
 	'tab_button_normal',
 	[
-		'label' => __( 'Normal', 'elementor' ),
+		'label' => __( 'Normal', 'haste-elementor-widgets' ),
 	]
 );
 
 $this->add_control(
 	'read_more_button_text_color',
 	[
-		'label' => __( 'Text Color', 'elementor' ),
+		'label' => __( 'Text Color', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::COLOR,
 		'default' => '#ffffff',
 		'selectors' => [
@@ -835,7 +835,7 @@ $this->add_control(
 $this->add_control(
 	'read_more_background_color',
 	[
-		'label' => __( 'Background Color', 'elementor' ),
+		'label' => __( 'Background Color', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::COLOR,
 		'scheme' => [
 			'type' => Scheme_Color::get_type(),
@@ -852,14 +852,14 @@ $this->end_controls_tab();
 $this->start_controls_tab(
 	'tab_button_hover',
 	[
-		'label' => __( 'Hover', 'elementor' ),
+		'label' => __( 'Hover', 'haste-elementor-widgets' ),
 	]
 );
 
 $this->add_control(
 	'read_more_hover_color',
 	[
-		'label' => __( 'Text Color', 'elementor' ),
+		'label' => __( 'Text Color', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::COLOR,
 		'selectors' => [
 			'{{WRAPPER}} a.elementor-button:hover, {{WRAPPER}} .elementor-button:hover' => 'color: {{VALUE}};',
@@ -870,7 +870,7 @@ $this->add_control(
 $this->add_control(
 	'read_more_button_background_hover_color',
 	[
-		'label' => __( 'Background Color', 'elementor' ),
+		'label' => __( 'Background Color', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::COLOR,
 		'selectors' => [
 			'{{WRAPPER}} a.elementor-button:hover, {{WRAPPER}} .elementor-button:hover' => 'background-color: {{VALUE}};',
@@ -881,7 +881,7 @@ $this->add_control(
 $this->add_control(
 	'read_more_button_hover_border_color',
 	[
-		'label' => __( 'Border Color', 'elementor' ),
+		'label' => __( 'Border Color', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::COLOR,
 		'condition' => [
 			'border_border!' => '',
@@ -895,7 +895,7 @@ $this->add_control(
 $this->add_control(
 	'read_more_hover_animation',
 	[
-		'label' => __( 'Animation', 'elementor' ),
+		'label' => __( 'Animation', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::HOVER_ANIMATION,
 	]
 );
@@ -920,7 +920,7 @@ $this->add_group_control(
 	Group_Control_Border::get_type(),
 	[
 		'name' => 'read_more_border',
-		'label' => __( 'Border', 'elementor' ),
+		'label' => __( 'Border', 'haste-elementor-widgets' ),
 		'placeholder' => '1px',
 		'default' => '1px',
 		'selector' => '{{WRAPPER}} .elementor-button',
@@ -931,7 +931,7 @@ $this->add_group_control(
 $this->add_control(
 	'read_more_border_radius',
 	[
-		'label' => __( 'Border Radius', 'elementor' ),
+		'label' => __( 'Border Radius', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::DIMENSIONS,
 		'size_units' => [ 'px', '%' ],
 		'selectors' => [
@@ -951,7 +951,7 @@ $this->add_group_control(
 $this->add_control(
 	'read_more_text_padding',
 	[
-		'label' => __( 'Text Padding', 'elementor' ),
+		'label' => __( 'Text Padding', 'haste-elementor-widgets' ),
 		'type' => Controls_Manager::DIMENSIONS,
 		'size_units' => [ 'px', 'em', '%' ],
 		'selectors' => [
