@@ -6,3 +6,26 @@
 	display: flex;
 	flex-wrap: wrap;
 }
+
+.haste-post-thumbnail img {
+	width: 100%;
+	height: auto;
+}
+
+.haste-image-top {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.haste-image-left {
+	float: left;
+}
+
+.haste-image-right {
+	float: right;
+}
+
+.haste-image-left + .haste-post-wrapper,
+.haste-image-right + .haste-post-wrapper {
+	float: left;
+}

@@ -181,7 +181,6 @@ $this->add_group_control(
 	]
 );
 
-
 $this->add_control(
 	'post_title_tag',
 	[
@@ -254,7 +253,7 @@ $this->start_controls_section(
 	]
 );
 
-$this->add_control(
+$this->add_responsive_control(
 	'post_columns',
 	[
 		'label' 	=> __( 'Post layout', 'haste-elementor-widgets' ),
@@ -419,7 +418,7 @@ $this->add_control(
 	]
 );
 
-$this->add_control(
+$this->add_responsive_control(
 	'post_title_margin',
 	[
 		'label' => __( 'Post Title Margin', 'haste-elementor-widgets' ),
@@ -458,6 +457,7 @@ $this->add_control(
 	[
 		'label' => __( 'Text Color', 'haste-elementor-widgets' ),
 		'type' 	=> Controls_Manager::COLOR,
+		'default' => '#000',
 		'scheme'=> [
 			'type' 	=> Scheme_Color::get_type(),
 			'value'	=> Scheme_Color::COLOR_1,
@@ -496,6 +496,50 @@ $this->start_controls_section(
 	]
 );
 
+$this->add_control(
+	'post_image_position',
+	[
+		'label' 	=> __( 'Image position', 'haste-elementor-widgets' ),
+		'type' 		=> Controls_Manager::SELECT,
+		'default' 	=> 'image-top',
+		'options' 	=> array(
+			'image-top' 	=> __( 'Top' , 'haste-elementor-widgets' ),
+			'image-left' 	=> __( 'Left' , 'haste-elementor-widgets' ),
+			'image-right' 	=> __( 'Right' , 'haste-elementor-widgets' ),
+		),
+	]
+);
+
+
+$this->add_responsive_control(
+	'post_image_width',
+	[
+		'label' => __( 'Image Width (%)', 'elementor' ),
+		'type' => Controls_Manager::SLIDER,
+		'default' => [
+			'size' => 100,
+			'unit' => '%',
+		],
+		'tablet_default' => [
+			'unit' => '%',
+		],
+		'mobile_default' => [
+			'unit' => '%',
+		],
+		'size_units' => [ '%' ],
+		'range' => [
+			'%' => [
+				'min' => 1,
+				'max' => 100,
+			],
+		],
+		'selectors' => [
+			'{{WRAPPER}} .haste-post-thumbnail' => 'width: {{SIZE}}%;',
+			'{{WRAPPER}} .haste-image-left + .haste-post-wrapper, {{WRAPPER}} .haste-image-right + .haste-post-wrapper' => 'width: calc( 100% - {{SIZE}}% );',
+		],
+	]
+);
+
 $this->add_responsive_control(
 	'post_thumb_margin',
 	[
@@ -508,10 +552,22 @@ $this->add_responsive_control(
 	]
 );
 
+$this->add_responsive_control(
+	'post_thumb_padding',
+	[
+		'label' => __( 'Image Padding', 'haste-elementor-widgets' ),
+		'type' => Controls_Manager::DIMENSIONS,
+		'size_units' => [ 'px', '%', 'em', 'vw', 'vh' ],
+		'selectors' => [
+			'{{WRAPPER}} .haste-post-thumbnail img' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+		],
+	]
+);
+
 $this->end_controls_section();
 
 
-// Posts styles
+// Meta styles
 $this->start_controls_section(
 	'section_meta_styles',
 	[
@@ -977,78 +1033,82 @@ protected function render() {
 
 				<article id="post-<?php the_ID(); ?>" <?php post_class('haste-post-item'); ?>>
 
-					<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" class="entry-link">
-
-						<?php if( $this->get_settings( 'show_post_image' ) == true ) : ?>
-							<div class="haste-post-thumbnail">
+					<?php if( $this->get_settings( 'show_post_image' ) == true && has_post_thumbnail() == true ) : ?>
+						<div class="haste-post-thumbnail haste-<?php echo $this->get_settings( 'post_image_position' ); ?>">
+							<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" class="entry-link">
 								<?php the_post_thumbnail( $this->get_settings( 'image_size' ) ); ?>
-							</div>
-						<?php endif; ?>
+							</a>
+						</div>
+					<?php endif; ?>
+
+					<div class="haste-post-wrapper">
 						<header class="haste-post-header">
-							<?php $title_tag = $this->get_settings( 'post_title_tag' ); ?>
-							<<?php echo $title_tag; ?> class="haste-post-title entry-title">
-							<?php the_title(); ?>
-							</<?php echo $title_tag; ?>>
+							<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" class="entry-link">
+								<?php $title_tag = $this->get_settings( 'post_title_tag' ); ?>
+								<<?php echo $title_tag; ?> class="haste-post-title entry-title">
+								<?php the_title(); ?>
+								</<?php echo $title_tag; ?>>
+							</a>
 						</header>
 
-					</a>
-					<?php $meta = $this->get_settings( 'show_meta' );
+						<?php $meta = $this->get_settings( 'show_meta' );
 
-					if( !empty( $meta ) ) : ?>
-					<div class="haste-post-meta entry-meta">
-						<?php if( in_array( 'date', $meta ) ) : ?>
-							<span class="haste-meta-info haste-post-date"><i class="fa fw fa-calendar" aria-hidden="true"></i> <?php echo '<time class="entry-date meta" datetime="'. esc_attr( get_the_date( 'c' ) ) .'">' . esc_html( get_the_date() ) . '</time>'; ?></span>
-						<?php endif; ?>
+						if( !empty( $meta ) ) : ?>
+						<div class="haste-post-meta entry-meta">
+							<?php if( in_array( 'date', $meta ) ) : ?>
+								<span class="haste-meta-info haste-post-date"><i class="fa fw fa-calendar" aria-hidden="true"></i> <?php echo '<time class="entry-date meta" datetime="'. esc_attr( get_the_date( 'c' ) ) .'">' . esc_html( get_the_date() ) . '</time>'; ?></span>
+							<?php endif; ?>
 
-						<?php if( in_array( 'author', $meta ) ) : ?>
-							<span class="haste-meta-info haste-post-author"><i class="fa fw fa-user" aria-hidden="true"></i> <?php echo '<a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" rel="author">' . get_the_author() . '</a>'; ?></span>
-						<?php endif; ?>
+							<?php if( in_array( 'author', $meta ) ) : ?>
+								<span class="haste-meta-info haste-post-author"><i class="fa fw fa-user" aria-hidden="true"></i> <?php echo '<a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" rel="author">' . get_the_author() . '</a>'; ?></span>
+							<?php endif; ?>
 
-						<?php if( in_array( 'category', $meta ) ) : ?>
-							<span class="haste-meta-info haste-post-category"><i class="fa fw fa-folder" aria-hidden="true"></i> <?php echo get_the_category_list( _x( ', ', 'Used between list items, there is a space after the comma.', 'haste-elementor-widgets' ) ); ?></span>
-						<?php endif; ?>
+							<?php if( in_array( 'category', $meta ) ) : ?>
+								<span class="haste-meta-info haste-post-category"><i class="fa fw fa-folder" aria-hidden="true"></i> <?php echo get_the_category_list( _x( ', ', 'Used between list items, there is a space after the comma.', 'haste-elementor-widgets' ) ); ?></span>
+							<?php endif; ?>
 
-						<?php if( in_array( 'comments', $meta ) ) : ?>
-							<span class="haste-meta-info haste-post-comments"><i class="fa fw fa-comments" aria-hidden="true"></i> <?php echo comments_popup_link( __( 'Leave a comment', 'haste-elementor-widgets' ), __( '1 Comment', 'haste-elementor-widgets' ), __( '% Comments', 'haste-elementor-widgets' ) ); ?></span>
-						<?php endif; ?>
-					</div>
-				<?php endif; ?>
+							<?php if( in_array( 'comments', $meta ) ) : ?>
+								<span class="haste-meta-info haste-post-comments"><i class="fa fw fa-comments" aria-hidden="true"></i> <?php echo comments_popup_link( __( 'Leave a comment', 'haste-elementor-widgets' ), __( '1 Comment', 'haste-elementor-widgets' ), __( '% Comments', 'haste-elementor-widgets' ) ); ?></span>
+							<?php endif; ?>
+						</div>
+					<?php endif; ?>
 
-				<?php if( $this->get_settings( 'show_excerpt' ) == true ) : ?>
-					<div class="haste-post-content">
+					<?php if( $this->get_settings( 'show_excerpt' ) == true ) : ?>
+						<div class="haste-post-content">
+							<?php
+							if( strpos( get_the_content(), '<!--more-->' ) ) {
+								the_content();
+							}
+							else {
+								the_excerpt();
+							}
+							?>
+						</div>
+					<?php endif; ?>
+
+					<?php if( $this->get_settings( 'show_read_more' ) == true ) : ?>
 						<?php
-						if( strpos( get_the_content(), '<!--more-->' ) ) {
-							the_content();
+						$this->add_render_attribute( 'wrapper', 'class', 'elementor-button-wrapper' );
+
+						$this->add_render_attribute( 'read_more_button', 'class', 'elementor-button' );
+
+						if ( ! empty( $settings['read_more_size'] ) ) {
+							$this->add_render_attribute( 'read_more_button', 'class', 'elementor-size-' . $settings['read_more_size'] );
 						}
-						else {
-							the_excerpt();
+
+						if ( $settings['read_more_hover_animation'] ) {
+							$this->add_render_attribute( 'read_more_button', 'class', 'elementor-animation-' . $settings['read_more_hover_animation'] );
 						}
+
 						?>
-					</div>
-				<?php endif; ?>
+						<div <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
+							<a <?php echo $this->get_render_attribute_string( 'read_more_button' ); ?> href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+								<?php $this->render_text(); ?>
+							</a>
+						</div>
+					<?php endif; ?>
 
-				<?php if( $this->get_settings( 'show_read_more' ) == true ) : ?>
-					<?php
-					$this->add_render_attribute( 'wrapper', 'class', 'elementor-button-wrapper' );
-
-					$this->add_render_attribute( 'read_more_button', 'class', 'elementor-button' );
-
-					if ( ! empty( $settings['read_more_size'] ) ) {
-						$this->add_render_attribute( 'read_more_button', 'class', 'elementor-size-' . $settings['read_more_size'] );
-					}
-
-					if ( $settings['read_more_hover_animation'] ) {
-						$this->add_render_attribute( 'read_more_button', 'class', 'elementor-animation-' . $settings['read_more_hover_animation'] );
-					}
-
-					?>
-					<div <?php echo $this->get_render_attribute_string( 'wrapper' ); ?>>
-						<a <?php echo $this->get_render_attribute_string( 'read_more_button' ); ?> href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-							<?php $this->render_text(); ?>
-						</a>
-					</div>
-				<?php endif; ?>
-
+				</div>
 			</article >
 
 		<?php }	?>
