@@ -100,6 +100,7 @@ class Haste_Post_Widget extends Widget_Base {
 				'label' 	=> __( 'Post type', 'haste-elementor-widgets' ),
 				'type' 		=> Controls_Manager::SELECT,
 				'options' 	=> $post_types_list,
+				'default'	=> 'post',
 			]
 		);
 
@@ -107,49 +108,62 @@ class Haste_Post_Widget extends Widget_Base {
 		$categories = get_categories( array(
 			'orderby' => 'name',
 			'order'   => 'ASC'
-		)
-	);
+			)
+		);
 
-	$cat_list = array();
+		$cat_list = array();
 
-	foreach( $categories as $category ) {
-		$cat_list[ $category->slug ] = $category->name;
-	}
+		foreach( $categories as $category ) {
+			$cat_list[ $category->slug ] = $category->name;
+		}
 
-	$this->add_control(
-		'categories',
-		[
-			'label' 	=> __( 'Categories', 'haste-elementor-widgets' ),
-			'type' 		=> Controls_Manager::SELECT2,
-			'options' 	=> $cat_list,
-			'multiple' 	=> true,
-		]
-	);
+		$this->add_control(
+			'categories',
+			[
+				'label' 	=> __( 'Categories', 'haste-elementor-widgets' ),
+				'type' 		=> Controls_Manager::SELECT2,
+				'options' 	=> $cat_list,
+				'multiple' 	=> true,
+			]
+		);
 
-	// Tags
-	$tags = get_tags( array(
-		'orderby' => 'name',
-		'order'   => 'ASC'
-	)
-);
+		// Tags
+		$tags = get_tags( array(
+			'orderby' => 'name',
+			'order'   => 'ASC'
+			)
+		);
 
-$tags_list = array();
+		$tags_list = array();
 
-foreach( $tags as $tag ) {
-	$tags_list[ $tag->slug ] = $tag->name;
-}
+		foreach( $tags as $tag ) {
+			$tags_list[ $tag->slug ] = $tag->name;
+		}
 
-$this->add_control(
-	'tags',
-	[
-		'label' 	=> __( 'Tags', 'haste-elementor-widgets' ),
-		'type' 		=> Controls_Manager::SELECT2,
-		'options' 	=> $tags_list,
-		'multiple' 	=> true,
-	]
-);
+		$this->add_control(
+			'tags',
+			[
+				'label' 	=> __( 'Tags', 'haste-elementor-widgets' ),
+				'type' 		=> Controls_Manager::SELECT2,
+				'options' 	=> $tags_list,
+				'multiple' 	=> true,
+			]
+		);
 
-$this->end_controls_section();
+		$this->add_control(
+			'tax_relation',
+			[
+				'label' 	=> __( 'Taxonomies Relation', 'haste-elementor-widgets' ),
+				'type' 		=> Controls_Manager::SELECT,
+				'default' 	=> 'OR',
+				'options' 	=> array(
+					'OR' 		=> __( 'OR' , 'haste-elementor-widgets' ),
+					'AND' 		=> __( 'AND' , 'haste-elementor-widgets' ),
+				),
+			]
+		);
+
+	$this->end_controls_section();
 
 
 // Post elements display options
@@ -204,11 +218,16 @@ $this->add_control(
 		'type' 		=> Controls_Manager::SELECT2,
 		'options' 	=> [
 			'date' 		=> __( 'Date', 'haste-elementor-widgets' ),
-			'author' 	=> __( 'Author', 'haste-elementor-widgets' ),
 			'category' 	=> __( 'Category', 'haste-elementor-widgets' ),
+			'author' 	=> __( 'Author', 'haste-elementor-widgets' ),
 			'comments' 	=> __( 'Comments Link', 'haste-elementor-widgets' ),
+			'tags'		=> __( 'Tags', 'haste-elementor-widgets' ),
 		],
 		'multiple' => true,
+		'default'	=> array(
+						'date',
+						'category'
+					),
 	]
 );
 
@@ -263,7 +282,7 @@ $this->add_responsive_control(
 				'cols' 		=> 1,
 				),
 		'options' 	=> array(
-			1	 		=> __( 'List' , 'haste-elementor-widgets' ),
+			1	 		=> __( 'List - 1 column' , 'haste-elementor-widgets' ),
 			2			=> __( '2 columns grid', 'haste-elementor-widgets' ),
 			3			=> __( '3 columns grid', 'haste-elementor-widgets' ),
 			4			=> __( '4 columns grid', 'haste-elementor-widgets' ),
@@ -992,29 +1011,33 @@ protected function render() {
 
 
 	$tags_terms = array();
-	foreach ( $post_tags as $my_tag ) {
-		array_push( $tags_terms, $my_tag );
-	}
+		foreach ( $post_tags as $my_tag ) {
+			array_push( $tags_terms, $my_tag );
+		}
 
-	$my_tax_query = array(
-		'relation' => 'AND',
-		array(
-			'taxonomy' 	=> 'category',
-			'field'    	=> 'slug',
-			'terms'    	=> $categories_terms,
-		),
-		array(
-			'taxonomy' => 'tag',
-			'field'    => 'slug',
-			'terms'    => $tags_terms,
-		),
-	);
+		$my_tax_query = array(
+			'relation' => $this->get_settings( 'tax_relation' ),
+			array(
+				'taxonomy' 	=> 'category',
+				'field'    	=> 'slug',
+				'terms'    	=> $categories_terms,
+			),
+			array(
+				'taxonomy' => 'tag',
+				'field'    => 'slug',
+				'terms'    => $tags_terms,
+			),
+		);
 
 	$args = array(
 		'post_type'  => $post_type,
 		'posts_per_page'=> $post_count,
-		//'tax_query'		=> $my_tax_query,
 	);
+
+	if ( ! empty( $post_categories ) || ! empty( $post_tags ) ) {
+		$args['tax_query'] = $my_tax_query;
+	}
+
 
 	// The Query
 	$the_query = new \WP_Query( $args );
@@ -1059,16 +1082,20 @@ protected function render() {
 								<span class="haste-meta-info haste-post-date"><i class="fa fw fa-calendar" aria-hidden="true"></i> <?php echo '<time class="entry-date meta" datetime="'. esc_attr( get_the_date( 'c' ) ) .'">' . esc_html( get_the_date() ) . '</time>'; ?></span>
 							<?php endif; ?>
 
-							<?php if( in_array( 'author', $meta ) ) : ?>
-								<span class="haste-meta-info haste-post-author"><i class="fa fw fa-user" aria-hidden="true"></i> <?php echo '<a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" rel="author">' . get_the_author() . '</a>'; ?></span>
-							<?php endif; ?>
-
 							<?php if( in_array( 'category', $meta ) ) : ?>
 								<span class="haste-meta-info haste-post-category"><i class="fa fw fa-folder" aria-hidden="true"></i> <?php echo get_the_category_list( _x( ', ', 'Used between list items, there is a space after the comma.', 'haste-elementor-widgets' ) ); ?></span>
 							<?php endif; ?>
 
+							<?php if( in_array( 'author', $meta ) ) : ?>
+								<span class="haste-meta-info haste-post-author"><i class="fa fw fa-user" aria-hidden="true"></i> <?php echo '<a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '" rel="author">' . get_the_author() . '</a>'; ?></span>
+							<?php endif; ?>
+
 							<?php if( in_array( 'comments', $meta ) ) : ?>
 								<span class="haste-meta-info haste-post-comments"><i class="fa fw fa-comments" aria-hidden="true"></i> <?php echo comments_popup_link( __( 'Leave a comment', 'haste-elementor-widgets' ), __( '1 Comment', 'haste-elementor-widgets' ), __( '% Comments', 'haste-elementor-widgets' ) ); ?></span>
+							<?php endif; ?>
+
+							<?php if( in_array( 'tags', $meta ) && has_tag() ) : ?>
+								<span class="haste-meta-info haste-post-tags"><i class="fa fw fa-tag" aria-hidden="true"></i> <?php echo get_the_tag_list( '', _x( ', ', 'Used between list items, there is a space after the comma.', 'haste-elementor-widgets' ) ); ?></span>
 							<?php endif; ?>
 						</div>
 					<?php endif; ?>
