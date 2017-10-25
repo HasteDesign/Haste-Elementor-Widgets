@@ -186,15 +186,6 @@ $this->add_control(
 	]
 );
 
-$this->add_group_control(
-	Group_Control_Image_Size::get_type(),
-	[
-		'name' => 'image', // Actually its `image_size`.
-		'label' => __( 'Image Size', 'haste-elementor-widgets' ),
-		'default' => 'large',
-	]
-);
-
 $this->add_control(
 	'post_title_tag',
 	[
@@ -515,6 +506,15 @@ $this->start_controls_section(
 	]
 );
 
+$this->add_group_control(
+	Group_Control_Image_Size::get_type(),
+	[
+		'name' => 'image', // Actually its `image_size`.
+		'label' => __( 'Image Size', 'haste-elementor-widgets' ),
+		'default' => 'large',
+	]
+);
+
 $this->add_control(
 	'post_image_position',
 	[
@@ -566,7 +566,7 @@ $this->add_responsive_control(
 		'type' => Controls_Manager::DIMENSIONS,
 		'size_units' => [ 'px', '%', 'em', 'vw', 'vh' ],
 		'selectors' => [
-			'{{WRAPPER}} .haste-post-thumbnail' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+			'{{WRAPPER}} .haste-post-thumbnail img' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 		],
 	]
 );
