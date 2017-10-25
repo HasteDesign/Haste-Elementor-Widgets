@@ -456,7 +456,7 @@ $this->end_controls_section();
 $this->start_controls_section(
 	'section_text_styles',
 	[
-		'label' 	=> esc_html__( 'Text', 'haste-elementor-widgets' ),
+		'label' 	=> esc_html__( 'Content', 'haste-elementor-widgets' ),
 		'tab'   => Controls_Manager::TAB_STYLE,
 
 	]
@@ -489,6 +489,18 @@ $this->add_control(
 		],
 		'selectors' => [
 			'{{WRAPPER}} .haste-post-item a' => 'color: {{VALUE}}',
+		],
+	]
+);
+
+$this->add_responsive_control(
+	'content_padding',
+	[
+		'label' => __( 'Content Padding', 'haste-elementor-widgets' ),
+		'type' => Controls_Manager::DIMENSIONS,
+		'size_units' => [ 'px', '%', 'em', 'vw', 'vh' ],
+		'selectors' => [
+			'{{WRAPPER}} .haste-post-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 		],
 	]
 );
